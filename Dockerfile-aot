@@ -1,0 +1,14 @@
+FROM ghcr.io/graalvm/graalvm-ce:latest AS build
+RUN gu install native-image
+
+COPY . /app
+WORKDIR /app
+
+RUN ./gradlew clean build
+RUN ls -la app/build/libs/
+RUN jar tf app/build/libs/app.jar
+RUN native-image --no-server --verbose -cp app/build/libs/app.jar test.aot.App aot-app-native
+
+FROM ubuntu:latest
+COPY --from=build /app/aot-app-native /app/aot-app-native
+ENTRYPOINT ["/app/aot-app-native"]

@@ -1,0 +1,26 @@
+plugins {
+    id 'application'
+}
+
+repositories {
+    mavenCentral()
+    gradlePluginPortal()
+}
+
+dependencies {
+    testImplementation 'junit:junit:4.13.2'
+    implementation 'com.google.guava:guava:32.1.1-jre'
+}
+
+application {
+    mainClass = 'test.aot.App'
+}
+
+
+jar {
+    manifest {
+        attributes(
+                'Main-Class': 'test.aot.App'
+        )
+    }
+}

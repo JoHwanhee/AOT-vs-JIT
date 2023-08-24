@@ -1,0 +1,12 @@
+# Build Stage
+FROM openjdk:11 AS build
+COPY . /app
+WORKDIR /app
+
+RUN ./gradlew clean build
+
+# Run Stage
+FROM ubuntu:latest
+RUN apt-get update && apt-get install -y openjdk-11-jdk
+COPY --from=build /app/app/build/libs/app.jar /app/app.jar
+ENTRYPOINT ["java", "-jar", "/app/app.jar"]
